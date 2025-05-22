@@ -3,7 +3,7 @@
 #
 lib/index.js:		src/*.ts Makefile
 	rm -f lib/*.js
-	npx tsc --outDir lib -d --sourceMap src/index.ts
+	npx tsc
 
 
 #
