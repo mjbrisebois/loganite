@@ -3,9 +3,7 @@
 #
 lib/index.js:		src/*.ts Makefile
 	rm -f lib/*.js
-	npx tsc -t es2022 -m es2022 --moduleResolution node --esModuleInterop	\
-		--strictNullChecks						\
-		--outDir lib -d --sourceMap src/index.ts
+	npx tsc --outDir lib -d --sourceMap src/index.ts
 
 
 #
@@ -23,6 +21,7 @@ build:			node_modules lib/index.js
 #
 # Testing
 #
+test:			test-unit
 test-unit:		build
 	npx mocha --no-warnings --enable-source-maps tests/unit/*.test.ts
 
@@ -31,7 +30,7 @@ test-unit:		build
 # Repository
 #
 clean-whitespace:
-	git diff --name-only | xargs sed -i 's/[ \t]*$$//'
+	git ls-files | xargs sed -i 's/[ \t]*$$//'
 clean-remove-chaff:
 	@find . -name '*~' -exec rm {} \;
 clean-files:		clean-remove-chaff
@@ -47,14 +46,9 @@ clean-files-all-force:	clean-remove-chaff
 #
 # NPM
 #
-prepare-package:
-	rm -f dist/*
-	npx webpack
-	MODE=production npx webpack
-	gzip -kf dist/*.js
-preview-package:	clean-files test prepare-package
+preview-package:	clean-files test
 	npm pack --dry-run .
-create-package:		clean-files test prepare-package
+create-package:		clean-files test
 	npm pack .
-publish-package:	clean-files test prepare-package
+publish-package:	clean-files test
 	npm publish --access public .

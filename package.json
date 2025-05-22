@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "description": "A minimal logger implementation for node, typescript, and the browser",
   "type": "module",
-  "main": "src/index.ts",
-  "module": "lib/index.js",
+  "main": "lib/index.js",
   "files": [
     "README.md",
     "lib/**",
@@ -26,6 +25,7 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.15.18",
     "chai": "^5.2.0",
+    "esbuild": "^0.25.4",
     "mocha": "^11.2.2",
     "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
