@@ -1,6 +1,6 @@
 {
   "name": "loganite",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A minimal logger implementation for node, typescript, and the browser",
   "type": "module",
   "main": "lib/index.js",
