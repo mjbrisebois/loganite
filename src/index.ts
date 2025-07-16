@@ -27,17 +27,12 @@ const LEVEL_TERMINAL = {
     trace_message: '\x1b[0;2m',
 };
 
-interface LogOptions {
-    level: LogLevel;
-    label: string;
-}
-
 export const isBrowser = typeof window !== 'undefined';
 
 function getLocalSetting(key: string): string | null {
     if (isBrowser && window.localStorage) {
         return window.localStorage.getItem(key);
-    } else if (process.env[key]) {
+    } else if (typeof process !== 'undefined' && process.env[key]) {
         return process.env[key];
     }
     return null;
@@ -66,6 +61,7 @@ export class Logger {
     public logLevel: LogLevel = LogLevel.NORMAL;
     public name: string;
     public color: boolean;
+    public truncateNameLength: number = 30;
 
     constructor(name: string = 'default', level?: LogLevel | string | number) {
         this.name = name;
@@ -132,12 +128,13 @@ export class Logger {
         }
 
         const timestamp = new Date().toISOString();
+        const name = (this.name + ' '.repeat(this.truncateNameLength)).substring(0, this.truncateNameLength);
 
         if (isBrowser) {
-            $console.log(`${timestamp} [ ${this.name} ] ${level}: ${message}`, ...args);
+            $console.log(`${timestamp} [ ${name} ] ${level}: ${message}`, ...args);
         } else {
             $console.log(
-                `${timestamp} [ \x1b[35m${this.name}\x1b[0m ] %s${level}\x1b[0m: %s${message}\x1b[0m`,
+                `${timestamp} [ \x1b[35m${name}\x1b[0m ] %s${level}\x1b[0m: %s${message}\x1b[0m`,
                 LEVEL_TERMINAL[level.toLowerCase() as keyof typeof LEVEL_TERMINAL],
                 LEVEL_TERMINAL[
                     (level.toLowerCase() + '_message') as keyof typeof LEVEL_TERMINAL
